@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{42578DE1-3BB3-456A-989F-BBA1D3618BFF}</ProjectGuid>
+    <RootNamespace>HelloWorld</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>zone-manager-plugin</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;HAVE_STDINT_H;HELLOWORLD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <ModuleDefinitionFile>zone-manager-plugin.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="mutex.cpp" />
+    <ClCompile Include="performance_test.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="plugin.cpp" />
+    <ClCompile Include="script.cpp" />
+    <ClCompile Include="script_tracker.cpp" />
+    <ClCompile Include="sdk\amxplugin.cpp" />
+    <ClCompile Include="sdk\getch.c" />
+    <ClCompile Include="thread.cpp" />
+    <ClCompile Include="zone.cpp" />
+    <ClCompile Include="zone_layer.cpp" />
+    <ClCompile Include="zone_manager.cpp" />
+    <ClCompile Include="zone_processor_client.cpp" />
+    <ClCompile Include="zone_processor_host.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="zone-manager-plugin.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mutex.h" />
+    <ClInclude Include="performance_test.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="player_zone_state.h" />
+    <ClInclude Include="point.h" />
+    <ClInclude Include="rectangle.h" />
+    <ClInclude Include="scoped_mutex.h" />
+    <ClInclude Include="scoped_player_map_ref.h" />
+    <ClInclude Include="scoped_zone_layer_map_ref.h" />
+    <ClInclude Include="script.h" />
+    <ClInclude Include="script_tracker.h" />
+    <ClInclude Include="sdk\amx.h" />
+    <ClInclude Include="sdk\getch.h" />
+    <ClInclude Include="sdk\plugin.h" />
+    <ClInclude Include="sdk\plugincommon.h" />
+    <ClInclude Include="sdk\sclinux.h" />
+    <ClInclude Include="thread.h" />
+    <ClInclude Include="threadsafe_queue.h" />
+    <ClInclude Include="zone.h" />
+    <ClInclude Include="zone_data_storage.h" />
+    <ClInclude Include="zone_layer.h" />
+    <ClInclude Include="zone_manager.h" />
+    <ClInclude Include="zone_messages.h" />
+    <ClInclude Include="zone_processor_client.h" />
+    <ClInclude Include="zone_processor_host.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
