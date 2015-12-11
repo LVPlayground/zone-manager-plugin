@@ -23,4 +23,4 @@ all:
 	g++ $(COMPILE_FLAGS) zone_manager.cpp -o out/zone_manager.o
 	g++ $(COMPILE_FLAGS) zone_processor_client.cpp -o out/zone_processor_client.o
 	g++ $(COMPILE_FLAGS) zone_processor_host.cpp -o out/zone_processor_host.o
-	g++ -O2 -m32 -fshort-wchar -shared -o out/$(OUTFILE) out/*.o
+	g++ -O2 -m32 -fshort-wchar -Wl,--export-dynamic -shared -o out/$(OUTFILE) out/*.o
