@@ -1,5 +1,6 @@
 LIBRARY	"zone-manager"
 EXPORTS
+	ProcessTick
 	Supports
 	Load
 	Unload
