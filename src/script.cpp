@@ -11,22 +11,28 @@
 const int CallbackNotFoundIndex = -1;
 
 // static
-GetPlayerPos_t Script::get_player_pos_ = 0;
+AmxNativeCall_t Script::get_player_pos_ = 0;
+AmxNativeCall_t Script::get_player_virtual_world_ = 0;
 
 // static
 std::unordered_map<AMX*, Script*> Script::script_map_;
 
 // static
 void Script::InitializeForRuntime(AMX* runtime) {
-  if (get_player_pos_ != 0)
-    return;
-
-  int native_index;
-  if (amx_FindNative(runtime, "GetPlayerPos", &native_index) != AMX_ERR_NONE)
+  if (get_player_pos_ != 0 && get_player_virtual_world_ != 0)
     return;
 
   AMX_HEADER* runtime_header = reinterpret_cast<AMX_HEADER*>(runtime->base);
-  get_player_pos_ = (GetPlayerPos_t)((AMX_FUNCSTUB *)((char *)runtime_header + runtime_header->natives + runtime_header->defsize * native_index))->address;
+
+  int get_player_pos_index;
+  if (amx_FindNative(runtime, "GetPlayerPos", &get_player_pos_index) == AMX_ERR_NONE) {
+    get_player_pos_ = (AmxNativeCall_t)((AMX_FUNCSTUB *)((char *)runtime_header + runtime_header->natives + runtime_header->defsize * get_player_pos_index))->address;
+  }
+
+  int get_player_virtual_world_index;
+  if (amx_FindNative(runtime, "GetPlayerVirtualWorld", &get_player_virtual_world_index) == AMX_ERR_NONE) {
+    get_player_virtual_world_ = (AmxNativeCall_t)((AMX_FUNCSTUB *)((char *)runtime_header + runtime_header->natives + runtime_header->defsize * get_player_virtual_world_index))->address;
+  }
 }
 
 // public OnPlayerEnterZone(player_id, layer_id, zone_id);
@@ -102,4 +108,21 @@ bool Script::GetPlayerPos(unsigned int player_id, Point& position) {
   amx_Release(runtime, params[4]);
 
   return retval == 1;
+}
+
+// static
+bool Script::GetPlayerVirtualWorld(unsigned int player_id, int32_t* virtual_world) {
+  AMX* runtime = ScriptTracker::GetActiveRuntime();
+  if (get_player_virtual_world_ == 0 || runtime == 0)
+    return false;
+
+  cell params[2];
+
+  params[0] = 1 * sizeof(cell);
+  params[1] = player_id;
+
+  cell retval = get_player_virtual_world_(runtime, params);
+  *virtual_world = static_cast<int32_t>(retval);
+
+  return true;
 }

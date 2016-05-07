@@ -11,9 +11,9 @@ typedef struct tagAMX AMX;
 struct Point;
 
 #ifdef WIN32
-typedef int32_t (*GetPlayerPos_t)(AMX*, int32_t*);
+typedef int32_t (*AmxNativeCall_t)(AMX*, int32_t*);
 #else
-typedef int (*GetPlayerPos_t)(AMX*, int*);
+typedef int (*AmxNativeCall_t)(AMX*, int*);
 #endif
 
 class Script {
@@ -50,6 +50,10 @@ class Script {
   // agnostic of which script it's being executed on.
   static bool GetPlayerPos(unsigned int player_id, Point& position);
 
+  // Invokes the GetPlayerVirtualWorld() native in the SA-MP server and returns the virtual
+  // world Id. This method is static because we don't care which runtime is being used.
+  static bool GetPlayerVirtualWorld(unsigned int player_id, int32_t* virtual_world);
+
   // This method should be called once per run-time. We'll attempt to find the address of the
   // GetPlayerPos() native in the SA-MP server.
   static void InitializeForRuntime(AMX* runtime);
@@ -78,5 +82,7 @@ class Script {
 
   // Statics.
   static std::unordered_map<AMX*, Script*> script_map_;
-  static GetPlayerPos_t get_player_pos_;
+
+  static AmxNativeCall_t get_player_pos_;
+  static AmxNativeCall_t get_player_virtual_world_;
 };

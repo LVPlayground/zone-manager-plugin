@@ -50,5 +50,6 @@ class ZoneManager {
   ZoneDataStorage zone_data_storage_;
   ZoneProcessorHost zone_processor_host_;
 
+  unsigned int status_update_counter_;
   unsigned int player_update_counter_;
 };

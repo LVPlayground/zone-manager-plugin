@@ -12,8 +12,9 @@
 #include "zone_messages.h"
 
 ZoneManager::ZoneManager()
-  : player_update_counter_(0)
-  , zone_processor_host_(zone_data_storage_) {
+    : player_update_counter_(0)
+    , status_update_counter_(0)
+    , zone_processor_host_(zone_data_storage_) {
 }
 
 unsigned int ZoneManager::CreateLayer(Script* script, unsigned int layer_id) {
@@ -106,13 +107,16 @@ void ZoneManager::ResetPlayers() {
 }
 
 void ZoneManager::ProcessUpdates() {
-  zone_processor_host_.ProcessUpdates();
+  if (status_update_counter_++ >= 10) {
+    zone_processor_host_.ProcessUpdates();
+    status_update_counter_ = 0;
+  }
 
-  // We update player positions once per ten frames, which will roughly equal to
-  // three times per second. More frequent doesn't serve a purpose as players will
+  // We update player positions once per fourty frames, which will roughly equal to
+  // six times per second. More frequent doesn't serve a purpose as players will
   // barely move in that timeframe, less frequent could miss updates for smaller
   // zones and faster moving players.
-  if (player_update_counter_++ < 10)
+  if (player_update_counter_++ < 40)
     return;
 
   player_update_counter_ = 0;
@@ -121,12 +125,14 @@ void ZoneManager::ProcessUpdates() {
   auto& player_map = scoped_player_map_ref.get();
 
   Point position;
+  int32_t virtual_world;
+
   for (std::pair<unsigned int, Player*> entry : player_map) {
-#if defined(PERFORMANCE_TEST)
-    if (PerformanceTest::GetPlayerPos(entry.second, position))
-#else
-    if (Script::GetPlayerPos(entry.first, position))
-#endif
-      entry.second->UpdatePosition(position);
+    Player* player = entry.second;
+
+    if (Script::GetPlayerPos(entry.first, position) &&
+        Script::GetPlayerVirtualWorld(entry.first, &virtual_world)) {
+      player->UpdatePosition(position, virtual_world);
+    }
   }
 }

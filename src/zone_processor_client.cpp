@@ -91,10 +91,12 @@ void ZoneProcessorClient::ProcessPlayerLocalization() {
   auto& player_map = data_storage_->player_map_;
 
   Point position;
+  bool flush;  // whether to reset their internal state
+
   for (std::pair<unsigned int, Player*> player_entry : player_map) {
-    if (player_entry.second->GetPositionIfInvalidated(position) == false)
+    if (player_entry.second->GetPositionIfInvalidated(position, &flush) == false)
       continue; // quick bail: the player's position hasn't been invalidated.
-    
+   
     auto scoped_zone_layer_map_ref = data_storage_->ZoneLayerMap();
     auto& zone_layer_map = scoped_zone_layer_map_ref.get();
     
@@ -102,10 +104,10 @@ void ZoneProcessorClient::ProcessPlayerLocalization() {
     // for each player, allowing us to keep track of that.
     for (std::pair<unsigned int, ZoneLayer*> layer_entry : zone_layer_map) {
       ZoneLayer* layer = layer_entry.second;
-      
+
       const Zone* player_zone = layer->PlayerState().CurrentZoneForPlayer(player_entry.first);
       if (player_zone != nullptr) {
-        if (PositionInArea(position, player_zone->Area(), player_zone->MaxHeight()))
+        if (!flush && PositionInArea(position, player_zone->Area(), player_zone->MaxHeight()))
           break; // quick bail: the player is still in their existing zone.
 
         layer->PlayerState().ResetZoneForPlayer(player_entry.first);
@@ -165,6 +167,6 @@ void ZoneProcessorClient::run() {
       process_players_counter = 0;
     }
 
-    thread_sleep(25);
+    thread_sleep(50);
   }
 }
